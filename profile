@@ -79,7 +79,7 @@ PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
 export PATH
 
 ##
-# Your previous /Users/jone/.profile file was backed up as /Users/jone/.profile.macports-saved_2009-09-08_at_23:26:06
+# Your previous /Users/qep/.profile file was backed up as /Users/jone/.profile.macports-saved_2009-09-08_at_23:26:06
 ##
 
 # MacPorts Installer addition on 2009-09-08_at_23:26:06: adding an appropriate PATH variable for use with MacPorts.
@@ -95,4 +95,4 @@ export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
-if [[ -s /Users/jone/.rvm/scripts/rvm ]] ; then source /Users/jone/.rvm/scripts/rvm ; fi
+if [[ -s /Users/qep/.rvm/scripts/rvm ]] ; then source /Users/qep/.rvm/scripts/rvm ; fi
