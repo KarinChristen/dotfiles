@@ -6,6 +6,10 @@ alias la='ls -lA'
 alias l='la'
 alias grep='grep --color'
 alias Preview='/Applications/Preview.app/Contents/MacOS/Preview'
+alias wget='curl -O'
+alias ql='qlmanage -p'
+alias shs='python -c"import SimpleHTTPServer as s;s.test()"'
+alias pag="ps aux | grep "
 
 # emacs
 alias e='/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/bin/emacsclient -n'
@@ -15,6 +19,18 @@ alias gvimp='gvim -p'
 alias mvimdiff='mvim -d'
 alias v='mvim --remote-tab-silent'
 alias d='mvimdiff'
+
+# Apache / mysql
+alias amstart='sudo /opt/local/apache2/bin/apachectl start; sudo /opt/local/bin/mysqld_safe5 &'
+alias apache2ctl='sudo /opt/local/apache2/bin/apachectl'
+alias aplog='tail -f /opt/local/apache2/logs/error_log'
+alias mysqlstart='sudo mysqld_safe5 &'
+alias mysqlstop='mysqladmin5 -u root shutdown'
+alias mysql='mysql5'
+
+#couchdb
+alias cdb='couchdb'
+
 
 alias fakemail='sudo ~/bin/fakemail.py --host=localhost --port=25 --path=/Users/qep/temp/mails --background'
 
