@@ -14,11 +14,6 @@ alias pag="ps aux | grep "
 # emacs
 alias e='/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/bin/emacsclient -n'
 
-# jsTestDriver
-alias jst='java -jar ~/bin/JsTestDriver.jar'
-alias jst-serve='java -jar ~/bin/JSTestDriver.jar --port '
-alias jst-runall='jst --tests all'
-
 # VIM
 alias gvimp='gvim -p'
 alias mvimdiff='mvim -d'
