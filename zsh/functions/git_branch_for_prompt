@@ -1,5 +1,19 @@
 if [[ -d ./.svn ]] {
   echo "[%{\033[0;36m%}SVN%{\033[00m%}]"
+} elif [[ -d ./.hg ]] {
+  branch=`hg branch`
+  hslines=`hg status 2>/dev/null |wc -l`
+  if [[ "$hslines" -gt "0" ]] {
+    hsahead= `hg outgoing 2>/dev/null |grep "no changes"|wc -l`
+    if [[ "$hsahead" -eq "0" ]] {
+      notice='%{\033[1;31m%}*'
+    } else {
+      notice='%{\033[1;35m%}^'
+    }
+  } else {
+    notice=''
+  }
+  echo "(%{\033[0;32m%}$branch$notice%{\033[00m%})"
 } else {
   branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
   if [[ `echo "$branch"|wc -c` -gt "1" ]] {

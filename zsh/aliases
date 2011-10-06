@@ -3,6 +3,7 @@
 alias ls='ls -Gh'
 alias ll='ls -l'
 alias la='ls -lA'
+alias lsd='ls -d */' #list only dirs
 alias l='la'
 alias grep='grep --color'
 alias Preview='/Applications/Preview.app/Contents/MacOS/Preview'
@@ -33,6 +34,7 @@ alias cdb='couchdb'
 
 
 alias fakemail='sudo ~/bin/fakemail.py --host=localhost --port=25 --path=/Users/qep/temp/mails --background'
+
 
 # rails
 alias rss='script/server'
@@ -67,6 +69,15 @@ alias gso='git show'
 alias gsv='git svn'
 alias gst='git config --add remote.origin.fetch "+refs/notes/*:refs/notes/*"'
 alias gt='git notes --ref=jenkins show'
+
+#mercurial
+alias ha='hg add'
+alias hc='hg commit'
+alias hl='hg pull'
+alias hp='hg push'
+alias hlog='hg log'
+alias hb='hg branch'
+alias hs='hg status'
 
 
 # subversion
