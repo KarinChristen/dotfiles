@@ -92,7 +92,6 @@ export PATH
 export PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # Finished adapting your PATH environment variable for use with MacPorts.
 
-
 ##
 # Your previous /Users/jone/.profile file was backed up as /Users/jone/.profile.macports-saved_2009-09-09_at_07:30:33
 ##

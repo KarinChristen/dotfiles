@@ -32,7 +32,12 @@ alias mysql='mysql5'
 #couchdb
 alias cdb='couchdb'
 
+#WordPress Sites shortcuts
+alias req='cd Sites/required/'
+alias reqp='cd Sites/required-projects/'
+alias reqf='cd Sites/required-projects/required-foundation/wordpress/wp-content/themes/'
 
+#fakemail
 alias fakemail='sudo ~/bin/fakemail.py --host=localhost --port=25 --path=/Users/qep/temp/mails --background'
 
 
