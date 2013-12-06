@@ -22,12 +22,10 @@ alias v='mvim --remote-tab-silent'
 alias d='mvimdiff'
 
 # Apache / mysql
-alias amstart='sudo /opt/local/apache2/bin/apachectl start; sudo /opt/local/bin/mysqld_safe5 &'
-alias apache2ctl='sudo /opt/local/apache2/bin/apachectl'
-alias aplog='tail -f /opt/local/apache2/logs/error_log'
-alias mysqlstart='sudo mysqld_safe5 &'
-alias mysqlstop='mysqladmin5 -u root shutdown'
-alias mysql='mysql5'
+alias apachestart='sudo apachectl start'
+alias apachestop='sudo apachectl stop'
+alias mysqlstart='sudo /usr/local/mysql/support-files/mysql.server start'
+alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
 
 #couchdb
 alias cdb='couchdb'
