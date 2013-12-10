@@ -6,8 +6,6 @@ export EDITOR='/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/bin/emacscl
 export ALTERNATE_EDITOR=vim
 PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:$PATH"
 PATH="$HOME/bin:$HOME/.bin:$HOME/.willgit/bin:$PATH"
-PATH="/Library/Frameworks/Python.framework/Versions/2.4.6/bin/:$PATH"
-PATH="/System/Library/Frameworks/Python.framework/Versions/2.4/bin/:$PATH"
 export PATH=/opt/subversion/bin:$PATH
 MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 TERM="xterm"; export TERM               # for the linux servers: use normal xterm
@@ -22,7 +20,7 @@ export WORDCHARS='*?_[]~=&;!#$%^(){}:|'
 cdpath=($cdpath ~/code)
 fpath=(~/.zsh/functions $fpath)
 
-autoload -U ~/.zsh/functions/*(:t)
+autoload -Uz ~/.zsh/functions/*(:t)
 
 HISTFILE=~/.zsh_history
 HISTSIZE=100
@@ -50,10 +48,6 @@ setopt HIST_REDUCE_BLANKS
 zmodload -i zsh/complist
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
-# named directories
-namedir izug /Users/jone/projects/izug/
-namedir skriptorium /Users/jone/projects/skriptorium/
-
 # http://www.cs.elte.hu/zsh-manual/zsh_14.html
 bindkey "^[[3~" delete-char             # Del
 bindkey "^[[A"  up-line-or-history      # Up arrow
@@ -68,7 +62,3 @@ bindkey "^J"    self-insert             # Shift-Enter for \n
 bindkey "^W"    delete-word             # Ctrl+W
 bindkey "^D"    backward-delete-word    # Ctrl+D
 bindkey "^O"    overwrite-mode          # Ctrl+O
-
-# configuration for emacs multi-term.el compatibility
-bindkey "\ef"    forward-word
-bindkey "\eb"    backward-word

@@ -1,0 +1,103 @@
+#!/bin/zsh
+
+# Display usage info
+vhost-usage() {
+cat <<"USAGE"
+Usage: vhost [OPTIONS] <name>
+	-h|--help	this screen
+	-pub		to create the webhost root in ~/Sites/required/name/public/
+	-url 		to specify a local address, default is http://name.local		
+	-rm 		to remove a previously created vhost, see examples
+	-d 		    to specify the webroot directory location, default is in ~/Sites/required (NO TRAILING SLASH)
+	-email 		to specify the email of the administrator in the virtual host file
+	-l 			to list the current virtual hosts
+
+IMPORTANT Notes:
+1- You need git setup to grab the template file if you do not have it already.
+2- You need to make sure you do not have a vhost called 'template' or that it is the one from this gist: https://gist.github.com/neverything/7827193
+
+Examples:
+vhost mysite        										this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/ reachable at http://mysite.local
+vhost -pub mysite        									this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/public/ reachable at http://mysite.local
+vhost -d ~/Sites/mysite/myroot -url dev.mysite.dev mysite 	this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/myroot reachable at http://dev.mysite.dev
+vhost -rm mysite.local mysite 								this will remove the apache2 vhost named mysite and remove the mysite.local entry from the /etc/hosts file. Be sure to specify boths
+USAGE
+exit 0
+}
+
+# Delete a virtual host file and it's entry in /etc/hosts
+vhost-remove() {
+	sudo -v
+	echo "Removing $url from /etc/hosts."
+	sudo sed -i '' '/'$url'/d' /etc/hosts
+
+	echo "Disabling and deleting the $name virtual host."
+
+	sudo rm /etc/apache2/extra/vhosts/$name.conf
+	sudo apachectl restart
+	exit 0
+}
+
+vhost-list() {
+	echo "Enabled virtual hosts:"
+	ls -l /etc/apache2/extra/vhosts/
+	exit 0
+}
+
+# Define and create default values
+name="${!#}"
+email="hostmaster@required.ch"
+url="$name.local"
+webroot="$HOME/Sites/required/$name"
+
+# Loop to read options and arguments
+while [ $1 ]; do
+    case "$1" in
+    	'-l') vhost-list;;
+		'-h'|'--help') vhost-usage;;
+        '-rm') url="$2"
+			   vhost-remove;;
+        '-pub') webroot="$HOME/Sites/required/$name/public";;
+        '-d') webroot="$2";;
+        '-url') url="$2";;
+		'-email') email="$2";;
+    esac
+    shift
+done
+
+# Check if the webroot exists
+if [ ! -d "$webroot" ]; then
+	echo "Creating $webroot directory"
+	mkdir -p $webroot
+fi
+
+echo "Checking for the virtual host template file..."
+
+if [ ! -f /etc/apache2/extra/vhosts/template ]; then
+    echo "Downloading template file with Git..."
+
+	sudo git clone https://gist.github.com/7827193.git /etc/apache2/extra/vhosts/temp
+
+	sudo mv /etc/apache2/extra/vhosts/temp/template /etc/apache2/extra/vhosts/template
+
+	sudo rm -Rf /etc/apache2/extra/vhosts/temp
+
+fi
+
+echo "Creating the new $name virtual host file that has a webroot of: $webroot"
+
+sudo cp /etc/apache2/extra/vhosts/template /etc/apache2/extra/vhosts/$name.conf
+sudo sed -i '' 's/template.email/'$email'/g' /etc/apache2/extra/vhosts/$name.conf
+sudo sed -i '' 's/template.url/'$url'/g' /etc/apache2/extra/vhosts/$name.conf
+sudo sed -i '' 's#template.webroot#'$webroot'#g' /etc/apache2/extra/vhosts/$name.conf
+sudo sed -i '' 's#template.name#'$name'#g' /etc/apache2/extra/vhosts/$name.conf
+
+echo "Adding $url to the /etc/hosts file..."
+
+echo "127.0.0.1 $url" | sudo tee -a /etc/hosts > /dev/null
+
+sudo apachectl restart
+
+echo "Virtual host $name created with a webroot at $webroot reachable from http://$url"
+
+exit 0

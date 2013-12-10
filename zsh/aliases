@@ -9,40 +9,23 @@ alias grep='grep --color'
 alias Preview='/Applications/Preview.app/Contents/MacOS/Preview'
 alias wget='curl -O'
 alias ql='qlmanage -p'
-alias shs='python -c"import SimpleHTTPServer as s;s.test()"'
 alias pag="ps aux | grep "
-
-# emacs
-alias e='/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/bin/emacsclient -n'
-
-# VIM
-alias gvimp='gvim -p'
-alias mvimdiff='mvim -d'
-alias v='mvim --remote-tab-silent'
-alias d='mvimdiff'
 
 # Apache / mysql
 alias apachestart='sudo apachectl start'
 alias apachestop='sudo apachectl stop'
-alias mysqlstart='sudo /usr/local/mysql/support-files/mysql.server start'
-alias mysqlstop='sudo /usr/local/mysql/support-files/mysql.server stop'
-
-#couchdb
-alias cdb='couchdb'
+alias apacherestart='sudo apachectl restart'
+alias mysqlstart='mysql.server start'
+alias mysqlstop='mysql.server stop'
+alias mysqlrestart='mysql.server restart'
+alias ampup='mysqlstart | apachestart'
+alias ampdown='mysqlstop | apachestop'
+alias amprestart='mysqlrestart | apacherestart'
 
 #WordPress Sites shortcuts
 alias req='cd Sites/required/'
 alias reqp='cd Sites/required-projects/'
 alias reqf='cd Sites/required-projects/required-foundation/wordpress/wp-content/themes/'
-
-#fakemail
-alias fakemail='sudo ~/bin/fakemail.py --host=localhost --port=25 --path=/Users/qep/temp/mails --background'
-
-
-# rails
-alias rss='script/server'
-alias rsg='script/generate'
-alias rsc='script/console'
 
 # git
 alias ga.='ga .'
@@ -121,21 +104,11 @@ alias ../../../../../../../../../../../../..='cd ../../../../../../../../../../.
 # Mac Application aliases
 alias firefox='open -a firefox'
 alias preview='open -a Preview'
-alias camino='open -a Camino'
-alias mail='open -a Mail'
+alias mail='open -a AirMail'
 alias skype='open -a Skype'
 alias adium='open -a Adium'
-alias ical='open -a ICal'
+alias ical='open -a Calendar'
 alias finder='open -a Finder'
-alias notes='open -a Stickies'
-alias tasks='open -a TaskCoach'
-alias emacs='open -a Emacs'
-alias taskcoach='open -a TaskCoach'
-alias seleniumrc='/Users/jone/Apps/selenium-server-1.0.1/start_selenium_rc.sh'
-
-# python stuff
-alias manager='bin/manager/manager.py'
-alias eggdist='python2.4 setup.py mregister sdist bdist_egg mupload -r '
 
 #Extensions
 alias -s pdf=preview
@@ -159,10 +132,3 @@ alias -s jpg=preview
 alias -s gif=preview
 
 alias -s php=php
-alias -s py=python
-
-alias -s el=emacs
-alias -s tsk=taskcoach
-
-# phone remote control
-alias phone_accept='curl "http://192.168.1.66/adr.htm?number=33"'
