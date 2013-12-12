@@ -1,16 +1,16 @@
-#!/bin/zsh
+#!/bin/bash
 
 # Display usage info
 vhost-usage() {
 cat <<"USAGE"
 Usage: vhost [OPTIONS] <name>
-	-h|--help	this screen
-	-pub		to create the webhost root in ~/Sites/required/name/public/
-	-url 		to specify a local address, default is http://name.local		
-	-rm 		to remove a previously created vhost, see examples
-	-d 		    to specify the webroot directory location, default is in ~/Sites/required (NO TRAILING SLASH)
-	-email 		to specify the email of the administrator in the virtual host file
-	-l 			to list the current virtual hosts
+	-h | --help			this screen
+	-p | --public		to create the webhost root in ~/Sites/required/name/public/
+	-u | --url 			to specify a local address, default is http://name.local		
+	-rm | --remove 		to remove a previously created vhost, see examples
+	-d | --directory    to specify the webroot directory location, default is in ~/Sites/required (NO TRAILING SLASH)
+	-e | --email 		to specify the email of the administrator in the virtual host file
+	-l | --list			to list the current virtual hosts
 
 IMPORTANT Notes:
 1- You need git setup to grab the template file if you do not have it already.
@@ -38,9 +38,56 @@ vhost-remove() {
 	exit 0
 }
 
+# List all the vhosts enabled
 vhost-list() {
 	echo "Enabled virtual hosts:"
 	ls -l /etc/apache2/extra/vhosts/
+	exit 0
+}
+
+# Magical create all function
+vhost-create() {
+
+	echo "Creating new vhost"
+
+	# Check if the webroot exists
+	if [ ! -d "$webroot" ]; then
+		echo "Creating $webroot directory"
+		mkdir -p $webroot
+	else
+		echo "Directory $webroot already exists, I'll carry on."
+	fi
+
+	# Check for the virtual hosts template file
+	echo "Checking for the virtual host template file..."
+
+	if [ ! -f /etc/apache2/extra/vhosts/template ]; then
+	    echo "Downloading template file with Git..."
+
+		sudo git clone https://gist.github.com/7827193.git /etc/apache2/extra/vhosts/temp
+
+		sudo mv /etc/apache2/extra/vhosts/temp/template /etc/apache2/extra/vhosts/template
+
+		sudo rm -Rf /etc/apache2/extra/vhosts/temp
+
+	fi
+
+	echo "Creating the new $name virtual host file that has a webroot of: $webroot"
+
+	sudo cp /etc/apache2/extra/vhosts/template /etc/apache2/extra/vhosts/$name.conf
+	sudo sed -i '' 's/template.email/'$email'/g' /etc/apache2/extra/vhosts/$name.conf
+	sudo sed -i '' 's/template.url/'$url'/g' /etc/apache2/extra/vhosts/$name.conf
+	sudo sed -i '' 's#template.webroot#'$webroot'#g' /etc/apache2/extra/vhosts/$name.conf
+	sudo sed -i '' 's#template.name#'$name'#g' /etc/apache2/extra/vhosts/$name.conf
+
+	echo "Adding $url to the /etc/hosts file..."
+
+	echo "127.0.0.1 $url" | sudo tee -a /etc/hosts > /dev/null
+
+	sudo apachectl restart
+
+	echo "Virtual host $name created with a webroot at $webroot reachable from http://$url"
+
 	exit 0
 }
 
@@ -51,53 +98,33 @@ url="$name.local"
 webroot="$HOME/Sites/required/$name"
 
 # Loop to read options and arguments
-while [ $1 ]; do
-    case "$1" in
-    	'-l') vhost-list;;
-		'-h'|'--help') vhost-usage;;
-        '-rm') url="$2"
-			   vhost-remove;;
-        '-pub') webroot="$HOME/Sites/required/$name/public";;
-        '-d') webroot="$2";;
-        '-url') url="$2";;
-		'-email') email="$2";;
-    esac
-    shift
-done
+if [ ! -z "$1" ]; then
+	while [ $1 ]; do
+    	case "$1" in
+    		'-h' | '--help') 		vhost-usage;;
 
-# Check if the webroot exists
-if [ ! -d "$webroot" ]; then
-	echo "Creating $webroot directory"
-	mkdir -p $webroot
+    		'-l' | '--list') 		vhost-list;;
+
+        	'-rm' | '--remove') 	url="$2"
+			   						vhost-remove;;
+
+        	'-p' | '--public') 		webroot="$HOME/Sites/required/$name/public"
+									vhost-create;;
+
+        	'-d' | '--directory') 	webroot="$2"
+			  						vhost-create;;
+
+        	'-u' | '--url') 		url="$2"
+									vhost-create;;
+
+			'-e' | '--email') 		email="$2"
+				  					vhost-create;;
+
+			$name)					vhost-create;;
+    	esac
+    	shift
+	done
+else
+	vhost-usage
+	exit 0
 fi
-
-echo "Checking for the virtual host template file..."
-
-if [ ! -f /etc/apache2/extra/vhosts/template ]; then
-    echo "Downloading template file with Git..."
-
-	sudo git clone https://gist.github.com/7827193.git /etc/apache2/extra/vhosts/temp
-
-	sudo mv /etc/apache2/extra/vhosts/temp/template /etc/apache2/extra/vhosts/template
-
-	sudo rm -Rf /etc/apache2/extra/vhosts/temp
-
-fi
-
-echo "Creating the new $name virtual host file that has a webroot of: $webroot"
-
-sudo cp /etc/apache2/extra/vhosts/template /etc/apache2/extra/vhosts/$name.conf
-sudo sed -i '' 's/template.email/'$email'/g' /etc/apache2/extra/vhosts/$name.conf
-sudo sed -i '' 's/template.url/'$url'/g' /etc/apache2/extra/vhosts/$name.conf
-sudo sed -i '' 's#template.webroot#'$webroot'#g' /etc/apache2/extra/vhosts/$name.conf
-sudo sed -i '' 's#template.name#'$name'#g' /etc/apache2/extra/vhosts/$name.conf
-
-echo "Adding $url to the /etc/hosts file..."
-
-echo "127.0.0.1 $url" | sudo tee -a /etc/hosts > /dev/null
-
-sudo apachectl restart
-
-echo "Virtual host $name created with a webroot at $webroot reachable from http://$url"
-
-exit 0

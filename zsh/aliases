@@ -21,6 +21,8 @@ alias mysqlrestart='mysql.server restart'
 alias ampup='mysqlstart | apachestart'
 alias ampdown='mysqlstop | apachestop'
 alias amprestart='mysqlrestart | apacherestart'
+alias fixwpupdate='sudo chown -R _www'
+alias fixwpuser= 'sudo chown -R g+w'
 
 #WordPress Sites shortcuts
 alias req='cd Sites/required/'
