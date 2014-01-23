@@ -11,6 +11,15 @@ alias wget='curl -O'
 alias ql='qlmanage -p'
 alias pag="ps aux | grep "
 
+# emacs
+alias e='/usr/local/Cellar/emacs/HEAD/Emacs.app/Contents/MacOS/bin/emacsclient -n'
+ 
+# VIM
+alias gvimp='gvim -p'
+alias mvimdiff='mvim -d'
+alias v='mvim --remote-tab-silent'
+alias d='mvimdiff'
+
 # Apache / mysql
 alias apachestart='sudo apachectl start'
 alias apachestop='sudo apachectl stop'
