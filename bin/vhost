@@ -5,10 +5,10 @@ vhost-usage() {
 cat <<"USAGE"
 Usage: vhost [OPTIONS] <name>
 	-h | --help			this screen
-	-p | --public		to create the webhost root in ~/Sites/required/name/public/
+	-p | --public		to create the webhost root in ~/Sites/name/public/
 	-u | --url 			to specify a local address, default is http://name.local		
 	-rm | --remove 		to remove a previously created vhost, see examples
-	-d | --directory    to specify the webroot directory location, default is in ~/Sites/required (NO TRAILING SLASH)
+	-d | --directory    to specify the webroot directory location, default is in ~/Sites (NO TRAILING SLASH)
 	-e | --email 		to specify the email of the administrator in the virtual host file
 	-l | --list			to list the current virtual hosts
 
@@ -17,9 +17,9 @@ IMPORTANT Notes:
 2- You need to make sure you do not have a vhost called 'template' or that it is the one from this gist: https://gist.github.com/neverything/7827193
 
 Examples:
-vhost mysite        										this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/ reachable at http://mysite.local
-vhost -pub mysite        									this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/public/ reachable at http://mysite.local
-vhost -d ~/Sites/mysite/myroot -url dev.mysite.dev mysite 	this will create a new apache2 vhost named mysite with a webroot of ~/Sites/required/mysite/myroot reachable at http://dev.mysite.dev
+vhost mysite        										this will create a new apache2 vhost named mysite with a webroot of ~/Sites/mysite/ reachable at http://mysite.local
+vhost -pub mysite        									this will create a new apache2 vhost named mysite with a webroot of ~/Sites/mysite/public/ reachable at http://mysite.local
+vhost -d ~/Sites/mysite/myroot -url dev.mysite.dev mysite 	this will create a new apache2 vhost named mysite with a webroot of ~/Sites/mysite/myroot reachable at http://dev.mysite.dev
 vhost -rm mysite.local mysite 								this will remove the apache2 vhost named mysite and remove the mysite.local entry from the /etc/hosts file. Be sure to specify boths
 USAGE
 exit 0
@@ -95,7 +95,7 @@ vhost-create() {
 name="${!#}"
 email="hostmaster@required.ch"
 url="$name.local"
-webroot="$HOME/Sites/required/$name"
+webroot="$HOME/Sites/$name"
 
 # Loop to read options and arguments
 if [ ! -z "$1" ]; then
@@ -108,7 +108,7 @@ if [ ! -z "$1" ]; then
         	'-rm' | '--remove') 	url="$2"
 			   						vhost-remove;;
 
-        	'-p' | '--public') 		webroot="$HOME/Sites/required/$name/public"
+        	'-p' | '--public') 		webroot="$HOME/Sites/$name/public"
 									vhost-create;;
 
         	'-d' | '--directory') 	webroot="$2"
